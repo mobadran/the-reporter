@@ -6,6 +6,8 @@ import { useEffect, useState } from "react";
 export default function Dashboard() {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
+  const [category, setCategory] = useState("General");
+  const [location, setLocation] = useState("");
   const [incidents, setIncidents] = useState<any[]>([]);
   const [user, setUser] = useState<any>(null);
   const [loading, setLoading] = useState(true);
@@ -47,14 +49,17 @@ export default function Dashboard() {
       body: JSON.stringify({
         title,
         description,
-        category: "General",
-        location: "School",
+        category,
+        location,
         reporterName: user.name,
+        reporterRole: user.role,
       }),
     });
 
     setTitle("");
     setDescription("");
+    setCategory("General");
+    setLocation("School");
     fetchIncidents(user.name);
   };
 
@@ -109,6 +114,44 @@ export default function Dashboard() {
                 />
               </div>
 
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-sm font-medium text-gray-600 mb-1">
+                    Category
+                  </label>
+                  <select
+                    className="w-full rounded-lg border border-gray-300 px-4 py-2 
+                         focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 
+                         outline-none transition"
+                    value={category}
+                    onChange={(e) => setCategory(e.target.value)}
+                  >
+                    <option value="General">General</option>
+                    <option value="Maintenance">Maintenance</option>
+                    <option value="Safety">Safety</option>
+                    <option value="Academic">Academic</option>
+                    <option value="Fight">Fight</option>
+                    <option value="Harassment">Harassment</option>
+                    <option value="Facility">Facility</option>
+                    <option value="Supply">Supply</option>
+                    <option value="Feedback">Feedback</option>
+                  </select>
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-600 mb-1">
+                    Location
+                  </label>
+                  <input
+                    className="w-full rounded-lg border border-gray-300 px-4 py-2 
+                         focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 
+                         outline-none transition"
+                    placeholder="Room 101, Lab..."
+                    value={location}
+                    onChange={(e) => setLocation(e.target.value)}
+                  />
+                </div>
+              </div>
+
               <button
                 onClick={submitIncident}
                 className="w-full bg-indigo-600 hover:bg-indigo-700 
@@ -123,9 +166,32 @@ export default function Dashboard() {
 
         <h2 className="text-xl font-bold my-3">My Incidents</h2>
         {incidents.map((i) => (
-          <div key={i._id} className="bg-white rounded-lg shadow-sm p-4 mb-3">
-            <p className="font-semibold text-lg">{i.title}</p>
-            <p className="text-sm text-gray-500">Status: {i.status}</p>
+          <div
+            key={i._id}
+            className="bg-white rounded-lg shadow-sm p-4 mb-3 border border-gray-100"
+          >
+            <div className="flex justify-between items-start">
+              <div>
+                <p className="font-semibold text-lg text-gray-800">{i.title}</p>
+                <p className="text-gray-600 my-1">{i.description}</p>
+                <div className="flex gap-2 text-xs font-medium mt-2">
+                  <span className="px-2 py-1 bg-blue-100 text-blue-700 rounded">
+                    {i.category}
+                  </span>
+                  <span className="px-2 py-1 bg-gray-100 text-gray-700 rounded">
+                    {i.location}
+                  </span>
+                </div>
+              </div>
+              <div className="text-right">
+                <p className="text-sm font-semibold text-indigo-600 uppercase tracking-wider">
+                  {i.status}
+                </p>
+                <p className="text-xs text-gray-400 mt-1">
+                  Priority: {i.priority}
+                </p>
+              </div>
+            </div>
           </div>
         ))}
       </div>

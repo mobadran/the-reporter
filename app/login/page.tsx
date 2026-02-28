@@ -9,13 +9,7 @@ export default function LoginPage() {
   const router = useRouter();
 
   const handleLogin = async () => {
-    const res = await fetch("/api/users", {
-      method: "POST",
-      body: JSON.stringify({ name, role }),
-    });
-
-    const user = await res.json();
-    localStorage.setItem("user", JSON.stringify(user));
+    localStorage.setItem("user", JSON.stringify({ name, role }));
 
     if (role === "admin") router.push("/admin");
     else router.push("/dashboard");
@@ -59,6 +53,7 @@ export default function LoginPage() {
               onChange={(e) => setRole(e.target.value)}
             >
               <option value="student">Student</option>
+              <option value="instructor">Instructor</option>
               <option value="admin">Admin</option>
             </select>
           </div>

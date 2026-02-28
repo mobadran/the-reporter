@@ -16,3 +16,13 @@ export async function PATCH(
 
   return NextResponse.json(updated);
 }
+
+export async function DELETE(
+  req: Request,
+  { params }: { params: Promise<{ id: string }> },
+) {
+  await connectDB();
+  const { id } = await params;
+  await Incident.findByIdAndDelete(id);
+  return NextResponse.json({ message: "Incident deleted successfully" });
+}
