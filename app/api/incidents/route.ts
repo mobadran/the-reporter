@@ -14,8 +14,8 @@ export async function POST(req: Request) {
   console.log({ body });
   // throw new Error("s");
 
-  // const priority = await getPriority(body);
-  const priority = "low";
+  const priority = await getPriority(body);
+  // const priority = "low";
 
   const incident = await Incident.create({
     title: body.title,
