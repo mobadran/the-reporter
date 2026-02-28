@@ -1,0 +1,18 @@
+import { NextResponse } from "next/server";
+import { connectDB } from "@/lib/db";
+import Incident from "@/lib/models/Incident";
+
+export async function PATCH(
+  req: Request,
+  { params }: { params: Promise<{ id: string }> },
+) {
+  await connectDB();
+  const body = await req.json();
+  const { id } = await params;
+
+  const updated = await Incident.findByIdAndUpdate(id, body, {
+    returnDocument: "after",
+  });
+
+  return NextResponse.json(updated);
+}
